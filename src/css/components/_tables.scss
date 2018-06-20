@@ -1,0 +1,285 @@
+/**
+ * Tables
+ * =================================
+ * Index:
+ * - Associated Table Variables
+ * - Default table Styles
+ * – Table modifiers:
+ *   - .table--striped
+ * – .responsiveTable
+ */
+
+// scss-lint:disable SelectorDepth
+
+/**
+ * Define associated Table variables
+ */
+$table-bgColor                : #ffffff !default; // Default background color used for all tables.
+$table-bgColor--accent        : #f9f9f9 !default; // Background color used for `.table-striped`.
+$table-bgColor--hover         : #ebebeb !default; // Background color used for `.table-hover` – set to 'inherit' by default (so no hover effect)
+$table-borderColor            : #ccc !default; // Border color for table and cell borders.
+$table-headBgColor            : #ffffff !default; // Default background color used for all tables.
+
+/**
+ * Customizes the `.table` component with basic values, each used across all table variations.
+ */
+$table-cell-padding           : 10px !default; // Padding for `<th>`s and `<td>`s.
+$table-rowBorderRadius        : 0px;
+
+
+// Baseline styles
+%table {
+	width: 100%;
+	max-width: 100%;
+	border-spacing: 0;
+	border: 2px solid $table-borderColor;
+    border: none;
+	background-color: $table-bgColor;
+	table-layout: fixed; // https://css-tricks.com/fixing-tables-long-strings/
+    border-collapse: separate; /* allow spacing between cell borders */
+    border-spacing: 0 0; /* NOTE: syntax is <horizontal value> <vertical value> */
+    // margin: -10px 0 ($baseline - 10px); /* NOTE: syntax is <horizontal value> <vertical value> */
+
+	// Cells
+	th,
+	td {
+		padding: $table-cell-padding;
+		line-height: $baseline;
+		vertical-align: middle;
+		border-bottom: 1px solid $table-borderColor;
+        font-size: 14px;
+        background-color: $table-bgColor;
+        // border: none;
+
+		&:first-child {
+            border-top-left-radius: $table-rowBorderRadius;
+            border-bottom-left-radius: $table-rowBorderRadius;
+            // border-left: 0;
+        }
+		&:last-child {
+            border-top-right-radius: $table-rowBorderRadius;
+            border-bottom-right-radius: $table-rowBorderRadius;
+            border-right: 0;
+        }
+	}
+
+    tr {
+        border-radius: $table-rowBorderRadius;
+        overflow: hidden;
+        // box-shadow: rgba(#000, 0.15) 0 0 5px 0;
+        transition: all 400ms ease;
+
+        &.is-selected {
+            box-shadow: $color-primary 0 0 0 2px;
+
+            th,
+            td {
+                background: $table-bgColor--hover;
+            }
+        }
+
+		td:empty:before {
+			content: "-";
+		}
+
+        &:last-child {
+            th,
+	        td {
+                border-bottom: none;
+            }
+        }
+    }
+
+	// Bottom align for column headings
+	> thead {
+		th,
+		td {
+			vertical-align: bottom;
+            // background: rgba($color-ea-dark-blue,0.8);
+            background: $table-headBgColor;
+            color: #e1e1e1;
+            font-size: rem(16);
+            font-weight: normal;
+			border-bottom: none;
+
+            @include respond-max(jumbo) {
+                font-size: rem(14);
+            }
+		}
+	}
+
+	// > tfoot td {
+		// border-top: 2px solid $table-borderColor;
+		// border-bottom: 0;
+	// }
+
+	// Remove top border from thead by default
+	> thead:first-child {
+		> tr:first-child {
+			> th,
+			> td {
+				border-top: 0;
+			}
+		}
+	}
+
+	> tbody {
+        td {
+            a,
+            a {
+
+                &,
+                span,
+                strong {
+                    color: $color-dark;//ea-blue
+                    font-weight: 600;
+                    transition: $default-transition;
+
+                    &:hover {
+                        color: $color-primary;
+                    }
+                }
+            }
+        }
+
+	    // if a hover color has been set in the variables
+        tr:hover {
+            td, th {
+                background-color: $table-bgColor--hover;
+            }
+        }
+	}
+
+	// Account for multiple tbody instances
+	> tbody + tbody {
+		border-top: 2px solid $table-borderColor;
+	}
+
+    > tfoot td {
+        border-top: 2px solid $table-borderColor;
+    }
+
+	// Nesting
+	& table,
+	& .table {
+		background-color: $color-bg;
+	}
+}
+
+
+table {
+    @extend %table;
+}
+
+th {
+	text-align: left;
+}
+
+
+/**
+ * Zebra-striping
+ * Default zebra-stripe styles (alternating gray and transparent backgrounds)
+ */
+.table--striped {
+	tbody :nth-child(odd) th,
+	tbody :nth-child(odd) td {
+		background-color: $table-bgColor--accent !important;
+	}
+}
+
+
+/**
+ * Responsive tables
+ * Wrap your tables in `.responsiveTable` and we'll make them mobile friendly by enabling horizontal scrolling. Only applies <768px. Everything above that will display normally.
+ *
+ * If you need more responsive tables, consider Tablesaw by the Filament Group:
+ * https://github.com/filamentgroup/tablesaw
+ */
+.responsiveTable {
+	@include respond-max(mid) {
+		width: 100%;
+		margin-bottom: ($line-height-base * .75) + px;
+		overflow-y: hidden;
+		overflow-x: auto;
+		-ms-overflow-style: -ms-autohiding-scrollbar;
+		border: 1px solid $table-borderColor;
+		-webkit-overflow-scrolling: touch;
+
+		// Tighten up spacing
+		> table {
+			margin-bottom: 0;
+			border: 0;
+
+			// Ensure the content doesn't wrap
+			> thead,
+			> tbody,
+			> tfoot {
+				th,
+				td {
+					white-space: nowrap;
+
+					// Nuke the appropriate borders so that the parent can handle them
+					&:first-child {	border-left: 0; }
+					&:last-child {	border-right: 0; }
+				}
+			}
+
+			// Only nuke the last row's bottom-border in `tbody` and `tfoot` since
+			// chances are there will be only one `tr` in a `thead` and that would
+			// remove the border altogether.
+			> tbody,
+			> tfoot tr:last-child {
+				> th,
+				> td {
+					border-bottom: 0;
+				}
+			}
+		}
+	}
+}
+
+
+
+    .row-actions {
+        width: 100px;
+        text-align: right;
+        font-size: 18px;
+
+        a {
+            color: $color-dark;//ea-blue
+
+            &:hover {
+                color: $color-primary;
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+    .gu-mirror {
+        @extend %table;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        border: 1px solid $table-borderColor;
+
+        td {
+            display: block;
+            flex-basis: auto;
+            flex-grow: 1;
+		    border-bottom: none;
+        }
+        .row-drag {
+            flex-basis: 40px;
+            flex-grow: 0;
+        }
+        .row-actions {
+            flex-basis: 100px;
+            flex-grow: 0;
+        }
+    }

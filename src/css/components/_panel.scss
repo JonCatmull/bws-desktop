@@ -1,0 +1,46 @@
+.panel {
+    box-shadow: $drop-shadow;
+    margin-bottom: $grid-gutter-width-px;
+    border-radius: 0;
+}
+
+.panel--white {
+    background: #fff;
+}
+
+    .panel-header {
+        padding: $grid-gutter-width-px/1.2 $grid-gutter-width-px;
+        border-bottom: 1px solid #eee;
+        @include clearfix;
+
+        h1, h2, h3, h4 {
+            float: left;
+            margin: 0;
+            line-height: 32px;
+        }
+
+            .panel-header-actions {
+                float: right;
+            }
+            .btn--small {
+                margin-top: -1em;
+                margin-bottom: -1em;
+            }
+    }
+        $panel-number-size: 2;
+        .panel-number {
+            display: inline-block;
+            height: $panel-number-size * 1em;
+            width: $panel-number-size * 1em;
+            border-radius: 50%;
+            color: #fff;
+            background: $color-primary;
+            text-align: center;
+            line-height: $panel-number-size * 1em;
+            margin: -0.5em 0.5em -0.5em 0;
+        }
+
+    .panel-inner {
+        padding: $grid-gutter-width-px;
+        @include clearfix;
+    }

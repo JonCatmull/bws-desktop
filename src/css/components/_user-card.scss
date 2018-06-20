@@ -1,0 +1,20 @@
+.userCard {
+    display: inline-block;
+    text-align: center;
+
+    img,
+    span {
+        display: inline-block;
+        line-height: 2.5em;
+        vertical-align: middle;
+    }
+    img {
+        width: 2.5em;
+        height: 2.5em;
+        border-radius: 1.25em;
+        margin-right: 10px;
+    }
+    span {
+        // font-weight: bold;
+    }
+}

@@ -1,0 +1,108 @@
+/**
+ * Buttons
+ * =================================
+ * Index:
+ * - Associated Button Variables
+ * - Base button styling
+ * – Button Modifiers
+ * 	 – btn--primary
+ *   – btn--block
+ */
+
+
+/**
+ * Define associated Button variables
+ */
+
+// $btn-default-bgColor             : $gray;
+// $btn-default-bgColor--highlight  : darken($btn-default-bgColor, 10%);
+
+// $btn-primary-bgColor             : $color-primary;
+// $btn-primary-bgColor--highlight  : darken($btn-primary-bgColor, 10%);
+
+
+/**
+ * Base button styles – Based on csswizardry.com/beautons
+ *
+ * 1. Allow us to better style box model properties.
+ * 2. Line different sized buttons up a little nicer.
+ * 3. Stop buttons wrapping and looking broken.
+ * 4. Make buttons inherit font styles.
+ * 5. Force all elements using beautons to appear clickable.
+ * 6. Normalise box model styles.
+ * 7. If the button’s text is 1em, and the button is (3 * font-size) tall, then
+ *    there is 1em of space above and below that text. We therefore apply 1em
+ *    of space to the left and right, as padding, to keep consistent spacing.
+ * 8. Fixes odd inner spacing in IE7.
+ * 9. Don’t allow buttons to have underlines; it kinda ruins the illusion.
+ *10. Prevents from inheriting default anchor styles.
+ */
+
+.pill {
+	display: inline-block;      /* [1] */
+	vertical-align: middle;     /* [2] */
+	white-space: nowrap;        /* [3] */
+	font-family: inherit;       /* [4] */
+	//font-size: 0.9em;           /* [4] */
+	border: none;               /* [6] */
+	margin: -.25em 0 0;         /* [6] */
+	padding-top:    .08em;      /* [6] */
+	padding-bottom: 0;          /* [6] */
+	//line-height: 1.4;           /* [7] */
+	//height:      1.4em;         /* [7] */
+	padding-right: .65em;       /* [7] */
+	padding-left: .65em;        /* [7] */
+	overflow: visible;          /* [8] */
+	text-align: center;
+
+	// You may want to change this
+	background-color: $btn-default-bgColor;
+
+    color: #ffffff;
+
+	border-radius: 5px;
+	user-select: none;
+
+    // font-family: $font-family-cond;
+	font-weight: bold;
+	text-transform: capitalize;
+
+	&.is-active {
+		background: $green;
+	}
+
+	&.is-pending {
+		background: #f3da00;
+	}
+
+	&.is-disabled {
+		background: $red;
+	}
+}
+
+// Set the backgrounds
+// -------------------------
+.pill--primary {
+	background-color: $btn-primary-bgColor;
+	color: #fff;
+}
+
+.pill--success {
+	background-color: $color-success;
+	color: #fff;
+}
+
+.pill--error {
+	background-color: $color-error;
+	color: #fff;
+}
+
+.pill--warning {
+	background-color: $color-warning;
+	color: #fff;
+}
+
+.pill--info {
+	background-color: $color-info;
+	color: #fff;
+}

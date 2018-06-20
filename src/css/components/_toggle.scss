@@ -1,0 +1,84 @@
+
+/**
+ * --------------------------------
+ *
+ * Checkbox toggle button example HTML
+ *
+ *  <div class="form-controlGroup">
+ *      <label class="form-label" for="toggle-1">Yes or no?</label>
+ *      <div class="inputWrapper">
+ *          <input id="toggle-1" name="toggle_1" class="toggle" type="checkbox">
+ *          <label for="toggle-1"></label>
+ *      </div>
+ *  </div>
+ *
+ * ================================= */
+$toggle-on: $color-success !default;
+$toggle-off: #cecece !default;
+$toggle-width: 60px;
+$toggle-gutter: 3px;
+.toggle {
+	position: absolute;
+	opacity: 0;
+	z-index: -1; /* Put the input behind the label so it doesn't overlay text */
+
+	// Background
+	+ label {
+		display: inline-block;
+        vertical-align: middle;
+		position: relative;
+		cursor: pointer;
+		outline: none;
+        user-select: none;
+        // margin-top: em(5);
+        // margin-bottom: em(5);
+
+		width: $toggle-width;
+		height: $toggle-width / 2;
+		background-color: $toggle-off;
+
+		border-radius: $toggle-width / 2;
+		transition: background 0.4s, box-shadow 0.4s;
+
+		&:before,
+		&:after {
+			display: block;
+			position: absolute;
+			content: "";
+		}
+
+		// Dot
+		&:after {
+			top: $toggle-gutter;
+			left: $toggle-gutter;
+			bottom: $toggle-gutter;
+			width: ($toggle-width / 2) - ($toggle-gutter *2);
+			background-color: $white;
+			border-radius: ($toggle-width / 2) - ($toggle-gutter *2);
+			transition: margin 0.4s, background 0.4s;
+		}
+	}
+	&:checked + label {
+		background-color: $toggle-on;
+
+		&:after {
+			margin-left: $toggle-width / 2;
+		}
+		&:before {
+			background-color: $toggle-on;
+		}
+	}
+	&:focus + label {
+		box-shadow: 0 0 0 2px darken($toggle-off, 5%);
+	}
+	&:checked:focus + label {
+		box-shadow: 0 0 0 2px darken($toggle-on, 5%);
+	}
+}
+
+    .toggle-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 5px;
+        cursor: pointer;
+    }

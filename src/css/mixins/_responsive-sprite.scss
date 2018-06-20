@@ -1,0 +1,20 @@
+@mixin responsive-sprite($img, $icon-classes, $horizontal: true) {
+    $icon-number: ceil(length($icon-classes));
+    $moveby: 100% / ($icon-number - 1); // one less that actual amount
+
+    background-image: url('#{$img}');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+
+    @if $horizontal {
+        background-size: ($icon-number * 100%) 100%;
+    } @else {
+        background-size: 100% ($icon-number * 100%);
+    }
+    @each $icon in $icon-classes {
+        $i: index($icon-classes, $icon);
+        &.#{$icon} {
+            background-position: ($moveby * ($i - 1)) 0;
+        }
+    }
+}

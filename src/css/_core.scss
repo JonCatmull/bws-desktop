@@ -1,0 +1,21 @@
+/**
+ * Core dependencies
+ * 
+ * Must not output any css!
+ */
+
+/*
+ * Mixins, helpers and functions
+ * Most CSS3 vendor prefixed items have a mixin,
+ * but we should not need them if autoprefixer is being used
+ * See mixins/css3.scss for the full list
+ */
+@import "functions/functions";
+@import "mixins/mixins";
+
+/**
+ * Core variables
+ * Edit your color palette and app vars before your begin
+ */
+@import "color-palette";
+@import "variables";

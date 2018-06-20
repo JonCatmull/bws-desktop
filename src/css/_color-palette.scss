@@ -1,0 +1,66 @@
+/**
+ * Global Color palette
+ * - Generic colors
+ * - Color scheme
+ * - Common colors
+ * - Links
+ * - Text selection
+ * - <hr>
+ * - Any others..
+ */
+
+// Generic colors
+$blue                         : #288ad6;
+$green                        : #16c98d;
+$red                          : #fa5e5b;
+$yellow                       : #feef6d;
+$orange                       : #eb6e20; // fe7c08
+$pink                         : #ff708e;
+$purple                       : #8e44ad;
+$gray                         : #818181;
+
+$white                             : #ffffff;
+$color-dark                        : #252525;
+$color-mid                         : $gray;
+$color-light                       : #d7d7d7;
+$black                             : #000000;
+
+// $color-light-80                     : tint($color-light, 80); // #f7f7f7
+
+// Color Scheme
+$color-primary                : $orange;
+$color-secondary              : $gray;
+$color-highlight              : $white;
+
+// Common colors
+$color-text                   : #7e7e7e;
+$color-bg                     : tint($color-light, 80);
+$color-headings               : lighten($color-dark, 12.9412);
+$color-border                 : #ddd;
+$color-header                 : #e1e1e1;
+
+$color-success                : $green;
+$color-error                  : $red;
+
+// Links
+$color-link-default           : $color-primary;
+$color-link-visited           : $color-link-default;
+$color-link-hover             : darken($color-link-default, 20%);
+$color-link-active            : darken($color-link-default, 20%);
+
+// Text Selection
+$color-selection              : #fff;
+$color-selection-bg           : $color-primary;
+
+
+// <hr> border color
+$hr-color                     : #e0e0e0;
+$table-headBgColor            : lighten($color-dark, 12.9412);
+
+// 3rd party brand colors - find more at brandcolors.net
+$color-twitter                : #55acee;
+$color-facebook               : #3b5998;
+$color-youtube                : #cd201f;
+$color-pinterest              : #bd081c;
+$color-instagram              : #3f729b;
+$color-user-menu              : #555555;

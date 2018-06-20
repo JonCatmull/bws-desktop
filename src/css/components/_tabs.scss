@@ -1,0 +1,165 @@
+/**
+ * Vertical tabs
+ *
+ * Usage:
+	<div class="tabs--vertical">
+        <nav class="tabs-control">
+            <ul>
+                <li>Control Item</li>
+            </ul>
+        </nav>
+        <div class="tabs-content">
+        </div>
+    </div>
+ */
+
+ .tabs {
+ }
+
+// .tabs--horizontal {
+//     .tabs-control {
+//         width: 100%;
+
+//         ul {
+//             margin: 0;
+//             list-style: none;
+
+//             li {
+//                 display: inline-block;
+//                 padding: em(10);
+//                 margin-right: 4px;
+//                 border: 1px solid #e0e0e0;
+//                 border-radius: 5px 5px 0 0;
+//                 border-right: none;
+//                 cursor: pointer;
+//                 color: #acacac;
+//                 background: #e1e1e1;
+//                 transition: $default-transition;
+
+//                 &:hover {
+//                     background: #d7d7d7;
+//                     color: #797979;
+//                 }
+
+//                 &.is-active {
+//                     background: $white;
+//                     color: $color-dark;
+//                     box-shadow: 1px 0px 0px 0px $white;
+//                 }
+//             }
+//         }
+//     }
+
+//     .tabs-content {
+//         display: inline-block;
+//         width: 100%;
+//         border: 1px solid #e0e0e0;
+//         border-radius: 0 5px 5px 5px;
+//         padding: em(5) em(15);
+//         background: $white;
+
+//         .form-controlGroup {
+//             margin-top: 6.3px;
+//         }
+//     }
+// }
+
+.tabs--vertical {
+    display: flex;
+
+    .tabs-control {
+        position: relative;
+        float: left;
+        width: 25%;
+        // border: 1px solid #e0e0e0;
+        border-radius: 5px 0 0 5px;
+        border-right: none;
+        vertical-align: top;
+        
+        ul {
+            margin: 0;
+            list-style: none;
+
+            li {
+                padding: em(10);
+                margin-bottom: 4px;
+                border: 1px solid #e0e0e0;
+                border-radius: 5px 0 0 5px;
+                border-right: none;
+                cursor: pointer;
+                color: #acacac;
+                background: #e1e1e1;
+                transition: $default-transition;
+
+                &:hover {
+                    background: #d7d7d7;
+                    color: #797979;
+                }
+
+                &.is-active {
+                    background: $white;
+                    color: $color-dark;
+                    box-shadow: 1px 0px 0px 0px $white;
+                }
+            }
+                .tabs--checkbox {
+                    position: relative;
+                    display: inline-block;
+                    vertical-align: middle;
+                    height: 20px;
+                    width: 20px;
+                    margin-right: 6px;
+                    transition: $default-transition;
+
+                    &.is-active {
+                        box-shadow: none;
+
+                        .materialIcon {
+                            color: $color-primary;
+
+                            &:before {
+                                content: 'check_box';
+                            }
+                        }
+                    }
+
+                    .materialIcon {
+                        color: #acacac;
+                        @include absolute-center;
+                        transition: color 300ms ease-in-out;
+
+                        &:before {
+                            content: 'check_box_outline_blank';
+                        }
+
+                        &:hover {
+                            color: $color-primary;
+                        }
+                    }
+
+                }
+        }
+    }
+
+    .tabs-content {
+        display: inline-block;
+        width: 75%;
+        border: 1px solid #e0e0e0;
+        border-radius: 0 5px 5px 5px;
+        padding: em(5) em(15);
+        background: $white;
+
+        .form-controlGroup {
+            margin-top: 6.3px;
+        }
+    }
+
+    .tabs-key {
+        padding-left: em(9);
+
+        .materialIcon {
+            margin-top: -1px;
+            color: #7e7e7e;
+        }
+    }
+}

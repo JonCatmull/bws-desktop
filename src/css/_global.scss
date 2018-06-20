@@ -1,0 +1,69 @@
+html,
+body,
+#main {
+    height: 100%;
+}
+
+/**
+ * Global app/site styles
+ */
+html {
+    overflow-y: scroll; // force scrollbar
+}
+body {
+	background-color: $color-bg;
+}
+
+    .body-inner {
+        // position: relative;
+        float: left;
+        min-height: 100%;
+        width: 100%;
+        transition: padding-bottom 100ms linear;
+
+        // Sidebar width
+        padding-left: 233px;
+
+        &.has-footer {
+            padding-bottom: 62px;
+        }
+
+        router-outlet {
+            display: none;
+        }
+
+        > * {
+            float: left;
+            clear: both;
+            width: 100%;
+            // padding: $layout-page-padding;
+        }
+    }
+
+/**
+ * Default layout container
+ */
+.l-container {
+	// width: 90%;
+	// max-width: $layout-max-width;
+	// margin: 0 auto;
+    width: 100%;
+    padding: $layout-page-padding;
+}
+.l-maxWidth {
+    max-width: $layout-max-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .l-fillHeight {
+        display: flex;
+        flex-direction: column;
+
+        // > *:not(.router-outlet) {
+        //     flex: 1 1 auto;
+        // }
+    }
+        .l-flexGrow {
+            flex: 1 1 auto;
+        }

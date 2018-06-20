@@ -1,0 +1,85 @@
+/**
+ * Icons
+ */
+
+/*
+[class^="icon-"], [class*=" icon-"] {
+	speak: none;
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.icon-large {
+	display: block;
+	width: 120px;
+	height: 120px;
+}
+
+.icon-small {
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	vertical-align: top;
+}*/
+
+.icon-arrow {
+      margin-left: em(-10);
+
+    &:before {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-right: em(5);
+        border-style: solid;
+        border-width: em(6) 0 em(6) em(8);
+        border-color: transparent transparent transparent #9a9a9a;
+        transition: border 200ms ease-in-out; 
+
+    }
+
+    &:hover:before {
+        border-color: transparent transparent transparent #efefef;
+    }
+
+    &.is-active {
+        &:before {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+
+.materialIcon {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: em(24);  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.materialIcon--error {
+    color: $color-error;
+}
+.materialIcon--success {
+    color: $color-success;
+}
