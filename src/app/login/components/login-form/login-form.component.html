@@ -1,19 +1,22 @@
-<div class="l-container">
-    <form id="loginForm" class="form">
-        <h3>Login:</h3>
 
+
+<form id="loginForm" class="form" [formGroup]="loginForm">
+    <fieldset class="form-fieldset">
+        <legend class="form-legend">Login</legend>
         <div class="form-controlGroup">
-            <label for="username" class="form-label">Username</label>
+            <label for="email" class="form-label">Email</label>
             <div class="form-controlGroup-inputWrapper">
-                <input id="username" class="form-input" name="username" type="text"/>
+                <input class="form-input" id="email" name="email" formControlName="email">
             </div>
         </div>
         <div class="form-controlGroup">
             <label for="password" class="form-label">Password</label>
             <div class="form-controlGroup-inputWrapper">
-                <input id="password" class="form-input" name="password" type="password"/>
+                <input class="form-input" id="password" name="password" formControlName="password" type="password">
             </div>
         </div>
-        <button type="submit" class="btn">Login</button>
-    </form>
-</div>
+    </fieldset>
+    <div class="form-buttons">
+        <button class="btn btn-primary" (click)="login()">Login</button>
+    </div>
+</form>
