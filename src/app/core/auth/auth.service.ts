@@ -32,20 +32,23 @@ export class AuthService {
     login(username: string, password: string) {
         return this.http.post<User>(`${environment.API}/login`, { username, password })
             .pipe(
-                tap(res => this.setSession),
+                tap(this.setSession),
                 shareReplay()
             );
     }
 
     private setSession(authResult) {
 
-        var decoded = jwtDecode(authResult.token);
-        console.log(decoded);
-
-        const expiresAt = moment().add(decoded.exp,'second');
-
         localStorage.setItem('token', authResult.token);
-        localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+
+        var decoded = jwtDecode(authResult.token);
+        console.log({decoded});
+
+        if (decoded.exp) {
+            const expiresAt = moment().add(decoded.exp,'second');
+            console.log('Set expires',expiresAt);
+            localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+        }
     }
 
     logout() {
