@@ -29,7 +29,7 @@ export class AuthService {
         public router: Router
     ) {}
 
-    login(username: string, password: string) {
+    public login(username: string, password: string) {
         return this.http.post<User>(`${environment.API}/login`, { username, password })
             .pipe(
                 tap(this.setSession),
@@ -37,21 +37,7 @@ export class AuthService {
             );
     }
 
-    private setSession(authResult) {
-
-        localStorage.setItem('token', authResult.token);
-
-        var decoded = jwtDecode(authResult.token);
-        console.log({decoded});
-
-        if (decoded.exp) {
-            const expiresAt = moment().add(decoded.exp,'second');
-            console.log('Set expires',expiresAt);
-            localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
-        }
-    }
-
-    logout() {
+    public logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("expires_at");
     }
@@ -60,14 +46,34 @@ export class AuthService {
         return moment().isBefore(this.getExpiration());
     }
 
-    isLoggedOut() {
+    public isLoggedOut() {
         return !this.isLoggedIn();
     }
 
-    getExpiration() {
+    public getExpiration() {
         const expiration = localStorage.getItem("expires_at");
         const expiresAt = JSON.parse(expiration);
         return moment(expiresAt);
+    }
+
+    private setSession(authResult) {
+
+        try {
+
+            var decoded = jwtDecode(authResult.token);
+            console.log('JWT decoded',decoded);
+            localStorage.setItem('token', authResult.token);
+            if (decoded.exp) {
+                const expiresAt = moment(decoded.exp).add(1, 'h'); // .add() = TEMP hack waiting for api fix
+                console.log('Set expires + 1 hour', expiresAt.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+                localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+            } else {
+                throw 'JWT failed to decode';
+            }
+        } catch(e) {
+            console.error(e);
+
+        }
     }
 
     // hasPrivilege(key: string): boolean {
