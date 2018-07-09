@@ -48,23 +48,6 @@ console.log('starting electron...');
                 // when you should delete the corresponding element.
                 win = null
             })
-            // Emitted when the window is closed.
-            win.on('reload', () => {
-                console.log('RELOAD')
-                win.loadURL(url.format({
-                    pathname: path.join(__dirname, '../dist/index.html'),
-                    protocol: 'file:',
-                    slashes: true
-                }));
-            })
-            win.on('refresh', () => {
-                console.log('Refresh')
-                win.loadURL(url.format({
-                    pathname: path.join(__dirname, '../dist/index.html'),
-                    protocol: 'file:',
-                    slashes: true
-                }));
-            })
         }, 1000);
     }
 
@@ -72,17 +55,6 @@ console.log('starting electron...');
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
     app.on('ready', createWindow)
-
-    app.on('reload', () => {
-        console.log('RELOAD')
-        win.loadURL(url.format({
-            pathname: path.join(__dirname, '../dist/index.html'),
-            protocol: 'file:',
-            slashes: true
-        }));
-        // if (win !== null) win.quit()
-        // createWindow()
-    })
 
     // Quit when all windows are closed.
     app.on('window-all-closed', () => {
