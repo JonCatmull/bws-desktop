@@ -24,6 +24,8 @@ interface User {
 })
 export class AuthService {
 
+    public user: User;
+
     constructor(
         public http: HttpClient,
         public router: Router
@@ -63,13 +65,11 @@ export class AuthService {
             var decoded = jwtDecode(authResult.token);
             console.log('JWT decoded',decoded);
             localStorage.setItem('token', authResult.token);
-            if (decoded.exp) {
-                const expiresAt = moment(decoded.exp).add(1, 'h'); // .add() = TEMP hack waiting for api fix
-                console.log('Set expires + 1 hour', expiresAt.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-                localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
-            } else {
-                throw 'JWT failed to decode';
-            }
+            if (!decoded.exp) throw 'JWT failed to decode';
+            const expiresAt = moment(decoded.exp).add(1, 'h'); // .add() = TEMP hack waiting for api fix
+            console.log('Set expires + 1 hour', expiresAt.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+            localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+            this.user = authResult;
         } catch(e) {
             console.error(e);
 

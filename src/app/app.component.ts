@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
 
+import { AuthService } from './core/auth/auth.service';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'BWS desktop';
+    title = 'BWS desktop';
+
+    constructor(public authService: AuthService) {}
+
 }

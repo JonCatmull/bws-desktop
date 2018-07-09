@@ -1,0 +1,8 @@
+{
+    "name": "bws-desktop",
+    "productName": "BWS Desktop",
+    "version": "1.0.0",
+    "description": "BWS Desktop",
+    "main": "electron.prod.js",
+    "license": "MIT"
+}
