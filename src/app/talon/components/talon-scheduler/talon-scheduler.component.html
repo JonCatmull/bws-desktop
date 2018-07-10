@@ -1,0 +1,21 @@
+
+<form id="talonScheduler" class="form" [formGroup]="schedulerForm">
+
+    <div class="form-controlGroup">
+        <label for="startDate" class="form-label">Schedule for:</label>
+        <div class="form-controlGroup-inputWrapper">
+            <input class="form-input" id="startDate" name="startDate" type="datetime-local" formControlName="startDate">
+        </div>
+    </div>
+    <div class="form-controlGroup">
+        <input class="form-input" id="repeat" name="repeat" type="checkbox" formControlName="repeat"> repeat every
+        <select class="form-input" id="website" name="website" formControlName="intervalDuration">
+            <option *ngFor="let duration of durationOptions" [value]="duration.value">{{duration.label}}</option>
+        </select>
+    </div>
+    <div class="form-buttons">
+        <button class="btn btn-primary" (click)="save()">Start</button>
+    </div>
+</form>
+<p>Form value: {{ schedulerForm.value | json }}</p>
+<p>Form status: {{ schedulerForm.status | json }}</p>

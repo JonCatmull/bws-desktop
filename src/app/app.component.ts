@@ -8,7 +8,6 @@ import { AuthService } from './core/auth/auth.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'BWS desktop';
 
     constructor(public authService: AuthService) {}
 

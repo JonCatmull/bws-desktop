@@ -6,6 +6,7 @@ import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { NgxElectronModule } from 'ngx-electron';
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { AppComponent } from './app.component';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        NgxElectronModule
+        NgxElectronModule,
+        CoreModule
     ],
     providers: [
         // {

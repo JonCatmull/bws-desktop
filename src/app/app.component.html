@@ -1,17 +1,7 @@
+<app-header></app-header>
+
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-    <div *ngIf="authService.isLoggedIn()">
-        <h1>
-            Welcome to {{ title }}!
-        </h1>
-
-        <!-- <a *ngIf="!authService.isLoggedIn()" routerLink="/login" class="btn btn--primary">Login</a> -->
-        <a *ngIf="authService.isLoggedIn()" (click)="authService.logout()" routerLink="/login" class="btn btn--primary">Logout</a>
-
-        <a routerLink="/talon" class="btn btn--primary">talon</a>
-    </div>
+<div>
     <router-outlet></router-outlet>
-
-    <pre *ngIf="authService.isLoggedIn()">{{ authService.user | json }}</pre>
 </div>
 

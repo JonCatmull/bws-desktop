@@ -1,0 +1,18 @@
+:host {
+    > div {
+        background: #252525;
+        display: flex;
+    }
+}
+
+    .header-logo {
+        padding: 10px;
+    }
+
+    .header-select {
+        padding: 10px;
+    }
+
+    .header-logout {
+        margin: 10px;
+    }
