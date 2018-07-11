@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TalonRoutingModule } from './talon-routing.module';
 import { TalonPageComponent } from './pages/talon-page/talon-page.component';
 import { TalonSchedulerComponent } from './components/talon-scheduler/talon-scheduler.component';
+import { TalonUploaderComponent } from './components/talon-uploader/talon-uploader.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import { TalonSchedulerComponent } from './components/talon-scheduler/talon-sche
     ReactiveFormsModule,
     TalonRoutingModule
   ],
-  declarations: [TalonPageComponent, TalonSchedulerComponent],
+  declarations: [TalonPageComponent, TalonSchedulerComponent, TalonUploaderComponent],
   exports: [TalonPageComponent]
 })
 export class TalonModule { }

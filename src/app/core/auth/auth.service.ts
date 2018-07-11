@@ -32,7 +32,7 @@ export class AuthService {
     }
 
     public login(username: string, password: string) {
-        return this.http.post<User>(`${environment.API}/login`, { username, password })
+        return this.http.post<User>(`/api/login`, { username, password })
             .pipe(
                 tap(this.setSession),
                 shareReplay()
