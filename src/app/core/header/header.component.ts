@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { DealershipService } from '../services/dealership.service';
 
@@ -13,14 +13,14 @@ export class HeaderComponent implements OnInit {
     dealershipSelect: FormControl;
 
     constructor(public authService: AuthService, public dealershipService: DealershipService) {
-        this.dealershipSelect = new FormControl('',Validators.required);
-
-        this.dealershipSelect.valueChanges.subscribe(val => {
-            this.dealershipService.setDealershipId(val);
-        });
+        // this.dealershipSelect = new FormControl('',Validators.required);
+        this.dealershipSelect = new FormControl(this.dealershipService.dealershipId, Validators.required);
     }
 
     ngOnInit() {
+        this.dealershipSelect.valueChanges.subscribe(val => {
+            this.dealershipService.dealershipId = parseInt(val);
+        });
     }
 
 }

@@ -11,14 +11,8 @@ import * as moment from "moment";
 
 // import { Config } from '../config/env.config';
 import { environment } from '../../../environments/environment';
+import { User } from "../interfaces/user.interface";
 
-interface User {
-    id: number;
-    token: string;
-    username: string;
-    // websites: {[key: number]: string}
-    websites: {id: number, name: string}[];
-}
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +24,12 @@ export class AuthService {
     constructor(
         public http: HttpClient,
         public router: Router
-    ) {}
+    ) {
+        // hack
+        if (!environment.production) {
+            console.warn('User not actually logged in. Dev override.');
+        }
+    }
 
     public login(username: string, password: string) {
         return this.http.post<User>(`${environment.API}/login`, { username, password })
@@ -47,7 +46,6 @@ export class AuthService {
 
     public isLoggedIn() {
         if (!environment.production) {
-            console.warn('User not actually logged in. Dev override.');
             return true; // hack
         }
         return moment().isBefore(this.getExpiration());

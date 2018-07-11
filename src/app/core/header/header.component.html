@@ -3,7 +3,7 @@
     <img class="header-logo" src="/assets/logos/morillian-bws.svg">
 
     <div class="header-select form-controlGroup-inputWrapper form-controlGroup-inputWrapper--select">
-        <select class="form-input form-input--select" id="website" name="website" formControlName="website">
+        <select class="form-input form-input--select" id="dealershipSelect" name="dealershipSelect" [formControl]="dealershipSelect">
             <option *ngFor="let website of authService.user.websites" [value]="website.id">{{website.name}}</option>
         </select>
     </div>
