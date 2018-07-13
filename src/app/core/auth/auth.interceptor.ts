@@ -13,9 +13,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
         const token = localStorage.getItem("token");
 
-        if (req.url.startsWith('/api')) {
+        // TODO: Move to ApiIntereceptor class
+        if (req.url.startsWith('@api')) {
             req = req.clone({
-                url: environment.API + req.url
+                url: environment.API + req.url.substring(4)
             });
         }
 

@@ -39,7 +39,7 @@ export class LoginFormComponent implements OnInit {
                     () => {
                         //TEMP HACK
                         // this.authService.user = {...TestUser};
-                        console.log("TEST user loaded",this.authService.user);
+                        // console.log("TEST user loaded",this.authService.user);
                         this.router.navigateByUrl('/');
                     }
                 );

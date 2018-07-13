@@ -15,7 +15,7 @@ const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: '',
+        redirectTo: 'talon',
         pathMatch: 'full',
         canActivate: [AuthGuard]
     }

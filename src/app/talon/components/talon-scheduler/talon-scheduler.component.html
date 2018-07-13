@@ -15,7 +15,7 @@
         </select>
     </div>
     <div class="form-buttons">
-        <button class="btn btn-primary" (click)="save()">Start</button>
+        <button class="btn btn--primary" (click)="save()" [disabled]="schedulerForm.status !== 'VALID'">Start</button>
     </div>
 </form>
 <p>Form value: {{ schedulerForm.value | json }}</p>

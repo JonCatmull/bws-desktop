@@ -19,9 +19,9 @@ export class TalonSchedulerComponent implements OnInit {
     ];
 
     constructor(public authService: AuthService,
-                private fb:FormBuilder) {
+                private formBuilder:FormBuilder) {
 
-        this.schedulerForm = this.fb.group({
+        this.schedulerForm = this.formBuilder.group({
             startDate: ['',Validators.required],
             repeat: false,
             intervalDuration: [{ value:'1', disabled: true}]

@@ -1,7 +1,9 @@
 
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path');
 const url = require('url');
+
+const { MssqlService } = require('./app-electron/mssql.service');
 
 console.log('starting electron...');
 
@@ -21,7 +23,7 @@ console.log('starting electron...');
                 height: 900,
                 icon: './src/favicon.ico',
                 webPreferences: {
-                    nodeIntegration: false // turn it on to use node features
+                    nodeIntegration: true // turn it on to use node features
                 }
             })
 
@@ -75,3 +77,75 @@ console.log('starting electron...');
 
   // In this file you can include the rest of your app's specific main process
   // code. You can also put them in separate files and require them here.
+
+    var mssqlService = new MssqlService();
+    // ipcMain.on('db-select-bikes', function(event, arg) {
+    //     mssqlService.fetchBikes().then(bikes => {
+    //         event.return = bikes;
+    //     }).catch(e => console.error("Main thread error:", e))
+    // });
+    ipcMain.on('db-bikes-select', (event, arg) => {
+        mssqlService.fetchBikes().then(bikes => {
+            event.sender.send('db-bikes-resp', bikes)
+        }).catch(e => {
+            console.error("Main thread error:", e)
+        })
+    })
+
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection at:', reason.stack || reason)
+  // Recommended: send the information to sentry.io
+  // or whatever crash reporting service you use
+})
+
+
+
+// const sql = require('mssql');
+// const Connection = require('tedious').Connection;
+// const Request = require('tedious').Request;
+
+    // ipcMain.on('db-select-bikes', function(event, arg) {
+
+    //     // var sql = require("mssql");
+
+    //     // config for your database
+    //     var config = {
+    //         user: 'sa',
+    //         password: '123',
+    //         server: 'localhost',
+    //         database: 'TALONStoreA'
+    //     };
+    //     // var con = {
+    //     //     userName: 'sa',
+    //     //     password: '123',
+    //     //     server: 'localhost',
+    //     //     // server: 'ROOM58-DEV5',
+    //     //     options: {
+    //     //         // encrypt: true, /*If you are connecting to a Microsoft Azure SQL database, you will need this*/
+    //     //         database: 'TALONStoreA',
+    //     //         // port: 1433,
+    //     //         instanceName: "SQLEXPRESS"
+    //     //     }
+    //     // }
+    //     console.log('begin connection to Talon...');
+    //     // connect to your database
+    //     sql.connect(config, function (err) {
+
+    //         if (err) console.log(err);
+
+    //         // create Request object
+    //         var request = new sql.Request();
+
+    //         // query to the database and get the records
+    //         request.query('select * from Student', function (err, recordset) {
+
+    //             if (err) console.log(err)
+
+    //             // send records as a response
+    //             event.returnValue = 'pong'
+
+    //         });
+    //     });
+    // });
+
