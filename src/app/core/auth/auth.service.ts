@@ -34,11 +34,18 @@ export class AuthService {
     }
 
     public login(username: string, password: string) {
-        return this.http.post<User>(`@api/login`, { username, password })
+        const obs = this.http.post<User>(`@api/login`, { username, password })
             .pipe(
                 tap(this.setSession),
                 shareReplay()
             );
+
+        const sub = obs.subscribe(user => {
+            this.user = user;
+            sub.unsubscribe();
+        });
+
+        return obs;
     }
 
     public logout() {
@@ -83,17 +90,17 @@ export class AuthService {
 
         console.log('server out by:',moment().diff(serverAt, 'milliseconds'));
 
-        console.log('TEST');
-        this._user = {...authResult};
-        console.log('TEST 2');
-        console.log('user:',this._user);
-        this.userSubject.next(this._user);
-
-        console.log('Successful login:',authResult);
 
         localStorage.setItem('token', authResult.token);
         localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
 
+        console.log('Successful login:',authResult);
+    }
+
+    set user(user: User) {
+        this._user = {...user};
+        console.log('user:',this._user);
+        this.userSubject.next(this._user);
     }
 }
 

@@ -3,12 +3,12 @@
     <img class="header-logo" src="/assets/logos/morillian-bws.svg">
 
     <div *ngIf="authService.user$ | async as user" class="header-select form-controlGroup-inputWrapper form-controlGroup-inputWrapper--select">
-        <select class="form-input form-input--select" id="dealershipSelect" name="dealershipSelect" [formControl]="dealershipSelect" [disabled]="user.websites.length < 2">
+        <select class="form-input form-input--select" id="dealershipSelect" name="dealershipSelect" [formControl]="dealershipSelect">
             <option *ngFor="let website of user.websites" [value]="website.id">{{website.name}}</option>
         </select>
     </div>
 
-    <pre *ngIf="authService.user$ | async as user">{{user | json}}</pre>
+    <!-- <pre *ngIf="authService.user$ | async as user">{{user | json}}</pre> -->
 
     <a (click)="authService.logout()" class="header-logout btn btn--primary">Logout</a>
 </div>

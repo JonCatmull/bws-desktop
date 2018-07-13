@@ -14,7 +14,8 @@ export class HeaderComponent implements OnInit {
 
     constructor(public authService: AuthService, public dealershipService: DealershipService) {
         // this.dealershipSelect = new FormControl('',Validators.required);
-        this.dealershipSelect = new FormControl(this.dealershipService.dealershipId, Validators.required);
+        const disabledState = (authService.user) ? Boolean(authService.user.websites.length < 2) : false;
+        this.dealershipSelect = new FormControl({value:this.dealershipService.dealershipId, disabled: disabledState, validators: [Validators.required]});
     }
 
     ngOnInit() {
