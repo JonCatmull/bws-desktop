@@ -104,7 +104,7 @@ var MssqlService = /** @class */ (function () {
                                 else {
                                     console.log(rowCount + ' rows returned');
                                     try {
-                                        resolve(JSON.stringify(results));
+                                        resolve(results);
                                     }
                                     catch (e) {
                                         reject(e);

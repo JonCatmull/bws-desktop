@@ -10,12 +10,14 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron-prod": "npm run build.prod && electron .",
+    "electron-prod": "npm run electron-scripts && npm run build.prod && electron .",
     "electron-dev": "npm run build && electron ./src/electron.dev",
     "package:win": "npm run build.prod && cross-var electron-packager dist $npm_package_name-$npm_package_version --out=packages --platform=win32 --arch=all --overwrite ",
     "package:linux": "npm run build.prod && cross-var electron-packager dist $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=all --overwrite ",
     "package:osx": "npm run build.prod && cross-var electron-packager dist $npm_package_name-$npm_package_version --out=packages --platform=darwin --arch=all --overwrite ",
-    "package:all": "npm run build.prod && cross-var electron-packager dist $npm_package_name-$npm_package_version --out=packages --all --arch=all --overwrite "
+    "package:all": "npm run build.prod && cross-var electron-packager dist $npm_package_name-$npm_package_version --out=packages --all --arch=all --overwrite ",
+    "electron-scripts": "gulp electron-scripts",
+    "electron-scripts.watch": "gulp watch"
   },
   "private": true,
   "dependencies": {
