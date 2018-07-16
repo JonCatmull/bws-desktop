@@ -3,14 +3,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
-// import * as Rx from 'rxjs/Rx';
+import { shareReplay, tap, filter } from 'rxjs/operators';
 
 import * as jwtDecode from 'jwt-decode';
 import * as moment from "moment";
 
-// import { Config } from '../config/env.config';
-// import { environment } from '../../../environments/environment';
 import { User } from "../interfaces/user.interface";
 
 
@@ -20,6 +17,8 @@ import { User } from "../interfaces/user.interface";
 export class AuthService {
 
     private _user: User;
+    private _sessionDuration: number = 900; // in seconds - default 15 mins
+    private _sessionTimer: any;
     public userSubject: BehaviorSubject<User>;
 
     constructor(
@@ -27,16 +26,13 @@ export class AuthService {
         public router: Router
     ) {
         this.userSubject = new BehaviorSubject(this._user);
-        // hack
-        // if (!environment.production) {
-        //     console.warn('User not actually logged in. Dev override.');
-        // }
+        // this.user$.pipe(filter(user => user !== null)).subscribe(user => this.logout());
     }
 
     public login(username: string, password: string) {
-        const obs = this.http.post<User>(`@api/login`, { username, password })
+        const obs = this.http.post<User>(`@api/user/login`, { username, password })
             .pipe(
-                tap(this.setSession),
+                tap(resp => this.setSession(resp)),
                 shareReplay()
             );
 
@@ -60,9 +56,6 @@ export class AuthService {
     }
 
     public isLoggedIn() {
-        // if (!environment.production) {
-        //     return true; // hack
-        // }
         return moment().isBefore(this.getExpiration());
     }
 
@@ -82,25 +75,42 @@ export class AuthService {
 
     private setSession(authResult) {
 
+        // Decode JWT to get expiry
         const decoded = jwtDecode(authResult.token);
+        console.log('decoded:',decoded);
 
         // Calculate exp time difference on server and add to local time
-        const serverAt = moment(decoded.iat * 1000);
-        const expiresAt = moment().add(moment(decoded.exp * 1000).diff(serverAt));
+        // const serverAt = moment(decoded.iat);
+        // this._sessionDuration = moment(decoded.exp).diff(serverAt);
+        // const expiresAt = moment().add(this._sessionDuration * 1000);
+        // const expiresAt = moment().add(2000); // TEMP hack
 
-        console.log('server out by:',moment().diff(serverAt, 'milliseconds'));
-
+        // Get session timout duration from token expiry timestamp vs server timestamp
+        this._sessionDuration = decoded.exp - decoded.iat;
 
         localStorage.setItem('token', authResult.token);
-        localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
 
         console.log('Successful login:',authResult);
+        this.resetSessionTimer();
     }
 
     set user(user: User) {
         this._user = {...user};
-        console.log('user:',this._user);
         this.userSubject.next(this._user);
+    }
+
+    resetSessionTimer() {
+        console.log('reset timeout', this._sessionDuration);
+        this.clearSessionTimer();
+
+        const expiresAt = moment().add(this._sessionDuration * 1000);
+        localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+
+        this._sessionTimer = setTimeout(() => this.logout(), this._sessionDuration * 1000);
+    }
+
+    clearSessionTimer() {
+        if (this._sessionTimer) clearTimeout(this._sessionTimer);
     }
 }
 

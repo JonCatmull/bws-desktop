@@ -10,5 +10,6 @@
 
     <!-- <pre *ngIf="authService.user$ | async as user">{{user | json}}</pre> -->
 
-    <a (click)="authService.logout()" class="header-logout btn btn--primary">Logout</a>
+    <a *ngIf="authService.isLoggedIn()" (click)="authService.logout()" class="header-logout btn">Logout</a>
+    <a *ngIf="authService.isLoggedOut()" routerLink="/login" class="header-logout btn btn--primary">Login</a>
 </div>

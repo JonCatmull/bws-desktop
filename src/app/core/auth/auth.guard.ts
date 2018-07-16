@@ -30,7 +30,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     check(route: ActivatedRouteSnapshot): boolean {
         if (this.authService.isLoggedIn()) return true;
         console.error('Access denied, please login to access this page.');
-        this.router.navigate(['/login']);
+        // this.router.navigate(['/login']);
+        this.authService.logout();
         return false;
     }
 
