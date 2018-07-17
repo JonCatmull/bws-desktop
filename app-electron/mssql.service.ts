@@ -5,18 +5,18 @@ const Request = require('tedious').Request;
 import { ConnectionConfig } from 'tedious';
 // import {Promise} from 'es6-promise'
 
-const testConfig: ConnectionConfig = {
-    userName: 'sa',
-    password: '123',
-    server: 'localhost',
-    // server: 'ROOM58-DEV5',
-    options: {
-        encrypt: false, /*If you are connecting to a Microsoft Azure SQL database, you will need this*/
-        database: 'TALONStoreA',
-        // port: 1433,
-        instanceName: "SQLEXPRESS"
-    }
-}
+// const testConfig: ConnectionConfig = {
+//     userName: 'sa',
+//     password: '123',
+//     server: 'localhost',
+//     // server: 'ROOM58-DEV5',
+//     options: {
+//         encrypt: false, /*If you are connecting to a Microsoft Azure SQL database, you will need this*/
+//         database: 'TALONStoreA',
+//         // port: 1433,
+//         instanceName: "SQLEXPRESS"
+//     }
+// }
 
 class MssqlService {
 
@@ -92,8 +92,8 @@ class MssqlService {
     /**
      * Fetch bikes from MS SQL Talon DB
      */
-    async fetchBikes() {
-        await this.connect(testConfig).catch(e => console.error(`.catch(${e})`));
+    async fetchBikes(config: ConnectionConfig) {
+        await this.connect(config).catch(e => console.error(`.catch(${e})`));
         return await this.runQuery("select * from dbo.bikes").catch(e => console.error(`.catch(${e})`));
     }
 }
