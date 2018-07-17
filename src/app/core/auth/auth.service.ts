@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay, tap, filter } from 'rxjs/operators';
+import { shareReplay, tap } from 'rxjs/operators';
 
 import * as jwtDecode from 'jwt-decode';
 import * as moment from "moment";
@@ -26,6 +26,9 @@ export class AuthService {
         public router: Router
     ) {
         this.userSubject = new BehaviorSubject(this._user);
+        if (this.isLoggedIn()) {
+            this.fetchUser().subscribe(resp => this.setSession(resp));
+        }
         // this.user$.pipe(filter(user => user !== null)).subscribe(user => this.logout());
     }
 
@@ -42,6 +45,13 @@ export class AuthService {
         });
 
         return obs;
+    }
+
+    public fetchUser() {
+        return this.http.get<User>(`@api/user`)
+            .pipe(
+                shareReplay()
+            );
     }
 
     public logout() {
