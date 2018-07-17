@@ -27,7 +27,7 @@ export class AuthService {
     ) {
         this.userSubject = new BehaviorSubject(this._user);
         // If valid token exists on load get user
-        if (this.isLoggedIn()) {
+        if (this.isLoggedIn() && !this._user) {
             this.fetchUser().subscribe(
                 resp => this.setSession(resp),
                 err => this.logout()

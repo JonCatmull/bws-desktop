@@ -1,5 +1,5 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -10,12 +10,16 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(private authService: AuthService) {}
+    private authService: AuthService;
+
+    constructor(private injector: Injector) {}
+
 
     intercept(req: HttpRequest<any>,
               next: HttpHandler): Observable<HttpEvent<any>> {
 
         const token = localStorage.getItem("token");
+        if (!this.authService) this.authService = this.injector.get(AuthService);
 
         // TODO: Move to ApiIntereceptor class
         if (req.url.startsWith('@api')) {
@@ -24,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
             });
         }
 
-        if (token && this.authService.isLoggedIn()) {
+        if (token && this.authService && this.authService.isLoggedIn()) {
             const cloned = req.clone({
                 headers: req.headers.set("Authorization",
                     "Bearer " + token)
