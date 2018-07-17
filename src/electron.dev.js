@@ -85,7 +85,8 @@ console.log('starting electron...');
     //     }).catch(e => console.error("Main thread error:", e))
     // });
     ipcMain.on('db-bikes-select', (event, arg) => {
-        mssqlService.fetchBikes().then(bikes => {
+        console.log('arg',arg);
+        mssqlService.fetchBikes(arg).then(bikes => {
             event.sender.send('db-bikes-resp', bikes)
         }).catch(e => {
             console.error("Main thread error:", e)

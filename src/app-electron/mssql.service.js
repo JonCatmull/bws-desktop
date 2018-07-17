@@ -37,18 +37,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 // import {Promise} from 'es6-promise'
-var testConfig = {
-    userName: 'sa',
-    password: '123',
-    server: 'localhost',
-    // server: 'ROOM58-DEV5',
-    options: {
-        encrypt: false,
-        database: 'TALONStoreA',
-        // port: 1433,
-        instanceName: "SQLEXPRESS"
-    }
-};
+// const testConfig: ConnectionConfig = {
+//     userName: 'sa',
+//     password: '123',
+//     server: 'localhost',
+//     // server: 'ROOM58-DEV5',
+//     options: {
+//         encrypt: false, /*If you are connecting to a Microsoft Azure SQL database, you will need this*/
+//         database: 'TALONStoreA',
+//         // port: 1433,
+//         instanceName: "SQLEXPRESS"
+//     }
+// }
 var MssqlService = /** @class */ (function () {
     function MssqlService() {
         console.log('mssql service instantiated');
@@ -131,11 +131,11 @@ var MssqlService = /** @class */ (function () {
     /**
      * Fetch bikes from MS SQL Talon DB
      */
-    MssqlService.prototype.fetchBikes = function () {
+    MssqlService.prototype.fetchBikes = function (config) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.connect(testConfig)["catch"](function (e) { return console.error(".catch(" + e + ")"); })];
+                    case 0: return [4 /*yield*/, this.connect(config)["catch"](function (e) { return console.error(".catch(" + e + ")"); })];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, this.runQuery("select * from dbo.bikes")["catch"](function (e) { return console.error(".catch(" + e + ")"); })];
