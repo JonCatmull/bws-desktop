@@ -7,9 +7,11 @@ const tsElectronPath = './app-electron/';
 gulp.task('electron-scripts', function(){
   return gulp.src(tsElectronPath+'**/*.ts')
         .pipe(ts({
-            noImplicitAny: true,
+            noImplicitAny: false,
             moduleResolution: "Node",
-            module: "es6",
+            module: "commonjs",
+            sourceMap: false,
+            // target: "es5",
             lib: [
                 "es2016",
                 "dom"
