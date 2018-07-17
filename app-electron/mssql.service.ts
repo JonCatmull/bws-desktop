@@ -28,31 +28,6 @@ class MssqlService {
         console.log('mssql service instantiated');
     }
 
-    // async connect(dbConfig: ConnectionConfig) {
-    //     const conn = this.connection as any;
-    //     if (this.connection && conn.STATE && conn.state === conn.STATE.LOGGED_IN) {
-    //         console.log(`DB already Connected - skip connect`);
-    //         return this.connection;
-    //     } else {
-    //         return await new Promise((resolve: Function, reject: Function) => {
-    //             this.connection = new Connection(dbConfig);
-    //             this.connection.on('connect', (err: Error) => {
-    //                 if (err) {
-    //                     console.error("Connection error:", err);
-    //                     reject(err);
-    //                 } else {
-    //                     console.log('DB Connected')
-    //                     resolve(this.connection);
-    //                     // this.fetchBikes();
-    //                 }
-    //             });
-    //             this.connection.on('error', (err: Error) => {
-    //                 console.error("Connection failed:", err);
-    //                 reject(err);
-    //             });
-    //         });
-    //     }
-    // }
     connect(dbConfig: ConnectionConfig) {
         return new Promise((resolve: Function, reject: Function) => {
             const conn = this.connection as any;
@@ -116,17 +91,11 @@ class MssqlService {
     /**
      * Fetch bikes from MS SQL Talon DB
      */
-    // async fetchBikes(config: ConnectionConfig) {
-    //     await this.connect(config).catch(e => console.error(`.catch(${e})`));
-    //     return await this.runQuery("select * from dbo.bikes").catch(e => console.error(`.catch(${e})`));
-    // }
     fetchBikes(config: ConnectionConfig) {
 
         return from(this.connect(config)).pipe(
             switchMap(connection => this.runQuery("select * from dbo.bikes"))
         )
-        // await this.connect(config).catch(e => console.error(`.catch(${e})`));
-        // return await this.runQuery("select * from dbo.bikes").catch(e => console.error(`.catch(${e})`));
     }
 }
 
