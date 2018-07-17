@@ -1,5 +1,10 @@
 
 <h2>Scheduler</h2>
+
+<p>To schedule an upload from you Talon Database to BWS for the future select a date on the form below. If you want to automatically
+    upload to talon in the future you can <strong>tick the box</strong> to automatically "repeat every" <strong>7 days</strong> or
+    <strong>24 hours</strong>.</p>
+
 <form id="talonScheduler" class="form" [formGroup]="schedulerForm">
 
     <div class="form-controlGroup">
@@ -18,5 +23,8 @@
         <button class="btn btn--primary" (click)="save()" [disabled]="schedulerForm.status !== 'VALID'">Start</button>
     </div>
 </form>
+
+
+
 <p>Form value: {{ schedulerForm.value | json }}</p>
 <p>Form status: {{ schedulerForm.status | json }}</p>
