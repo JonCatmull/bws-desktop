@@ -26,8 +26,12 @@ export class AuthService {
         public router: Router
     ) {
         this.userSubject = new BehaviorSubject(this._user);
+        // If valid token exists on load get user
         if (this.isLoggedIn()) {
-            this.fetchUser().subscribe(resp => this.setSession(resp));
+            this.fetchUser().subscribe(
+                resp => this.setSession(resp),
+                err => this.logout()
+            );
         }
         // this.user$.pipe(filter(user => user !== null)).subscribe(user => this.logout());
     }
