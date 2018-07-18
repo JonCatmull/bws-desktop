@@ -33,11 +33,7 @@ export class TalonService {
     fetchTalonCredentials(dealershipId: number) {
         console.log('TalonService: fetchTalonCredentials()');
         return this.http.get<iTalonDetails>(`@api/talon-details/${dealershipId}`).pipe(
-            tap(resp => {
-                console.log('talon:',resp);
-                this.lastImported = resp.lastImportedAt;
-                // this.apiKey = resp.talonApiKey;
-            })
+            tap(resp => this.lastImported = resp.lastImportedAt)
         );
     }
 
@@ -52,7 +48,7 @@ export class TalonService {
     //         switchMap(id => (!_config) ? this.fetchTalonCredentials(id): of(_config)),
     //         tap(config => _config = config),
     //         switchMap(config => this.fetchBikesFromDB(config)),
-    //         switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes)),
+    //         switchMap(bikes => this.postToServer(dealershipId, _config, bikes)),
     //         tap(resp => console.log('resp!!!!!',resp)),
     //         catchError(err => this.logService.log(dealershipId, JSON.stringify(err), {inventoryImportId: _config.inventoryImportId})),
     //     );
@@ -66,9 +62,9 @@ export class TalonService {
     fetchBikesAndUpload(dealershipId: number, _config?: iTalonDetails) {
         console.log('Fetch and upload to server...');
         return this.fetchBikes(dealershipId, _config).pipe(
-            switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes)),
+            switchMap(bikes => this.postToServer(dealershipId, _config, bikes)),
             tap(resp => console.log('resp!!!!!',resp)),
-            catchError(err => this.postErrorToAPI(dealershipId, err, _config))
+            catchError(this.postErrorToAPI(dealershipId, _config))
         );
     }
 
@@ -83,7 +79,7 @@ export class TalonService {
             switchMap(id => (!_config) ? this.fetchTalonCredentials(id): of(_config)),
             tap(config => _config = config),
             switchMap(config => this.fetchBikesFromDB(config)),
-            catchError(err => this.postErrorToAPI(dealershipId, err, _config))
+            catchError(this.postErrorToAPI(dealershipId, _config))
         );
     }
 
@@ -96,11 +92,11 @@ export class TalonService {
         console.log('Schedule upload to server...');
         // return this.fetchBikes(dealershipId).pipe(
 
-        //     switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes)),
+        //     switchMap(bikes => this.postToServer(dealershipId, _config, bikes)),
         //     tap(resp => console.log('resp!!!!!',resp)),
         //     catchError(err => {
         //         console.error('abort schedule');
-        //         this.postErrorToAPI(dealershipId, err, _config))
+        //         this.postErrorToAPI(dealershipId, _config))
         // );
     }
 
@@ -110,10 +106,12 @@ export class TalonService {
      * @param config Talon config from API
      * @param bikes Bike table data
      */
-    uploadToServer(dealershipId: number, config: iTalonDetails, bikes: any[]) {
-        console.log('uploadToServer()');
+    postToServer(dealershipId: number, config: iTalonDetails, bikes: any[]) {
+        console.log('postToServer()');
         const headers: {[header: string]: string} = {'Authorization': `apikey ${config.talonApiKey}`};
-        return this.http.post(`@api/talon-importer/${config.inventoryImportId}`,{websiteId:dealershipId, Table: bikes}, {headers});
+        return this.http.post(`@api/talon-importer/${config.inventoryImportId}`,{websiteId:dealershipId, Table: bikes}, {headers}).pipe(
+            tap(() => this.lastImported = new Date().toISOString())
+        );
     }
 
     /**
@@ -139,10 +137,20 @@ export class TalonService {
         });
     }
 
-    postErrorToAPI(dealershipId, err, config) {
-        return this.logService.log(dealershipId, JSON.stringify(err), {inventoryImportId: config.inventoryImportId}).pipe(
-            // throwError(resp => `Error logged ${err}`)
-        )
+    postErrorToAPI(dealershipId, config) {
+        return (err: any) => {
+            let errMsg = `Error:
+                dealershipId=${dealershipId}
+                config=${config}
+                error=${JSON.stringify(err)}
+            `;
+            console.log(`${errMsg}:`, err);
+
+            return this.logService.log(dealershipId, errMsg, {inventoryImportId: config.inventoryImportId})
+            .pipe(
+                switchMap(() => throwError(new Error(errMsg)))
+            )
+        }
     }
 
 
