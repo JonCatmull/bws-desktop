@@ -10,6 +10,6 @@ export class LogService {
 
     log(websiteId: number, message: string, extra?: any) {
         const payload: any = {websiteId, message, ...extra};
-        this.http.post(`@api/talon-log`, payload);
+        return this.http.post<any[]>(`@api/talon-log`, payload);
     }
 }

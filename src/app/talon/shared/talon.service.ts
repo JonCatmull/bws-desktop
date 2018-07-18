@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 // import { of, Observable } from 'rxjs';
-import { map, tap, switchMap, filter } from 'rxjs/operators';
+import { map, tap, switchMap, filter, catchError } from 'rxjs/operators';
 
 import { ElectronService } from 'ngx-electron';
 import { ConnectionConfig } from 'tedious';
-import { from } from 'rxjs';
+import { from, Observable, throwError, of } from 'rxjs';
 import { LogService } from '../../core/services/log.service';
 
 interface iTalonDetails {
@@ -26,12 +26,15 @@ export class TalonService {
     lastImported: string;
     // apiKey: string;
     // connectionConfig: ConnectionConfig;
+    scheduledUpload: any;
 
     constructor(private http: HttpClient, private _electronService: ElectronService, private logService: LogService) { }
 
     fetchTalonCredentials(dealershipId: number) {
+        console.log('TalonService: fetchTalonCredentials()');
         return this.http.get<iTalonDetails>(`@api/talon-details/${dealershipId}`).pipe(
             tap(resp => {
+                console.log('talon:',resp);
                 this.lastImported = resp.lastImportedAt;
                 // this.apiKey = resp.talonApiKey;
             })
@@ -43,19 +46,74 @@ export class TalonService {
      * and upload to server
      * @param dealershipId Target dealership id
      */
-    fetchAndUpload(dealershipId: number) {
-        console.log('uploading to server...');
-        let _config;
-        this.fetchTalonCredentials(dealershipId).pipe(
+    // fetchAndUpload(dealershipId: number, _config?: iTalonDetails) {
+    //     console.log('Fetch and upload to server...');
+    //     return of(dealershipId).pipe(
+    //         switchMap(id => (!_config) ? this.fetchTalonCredentials(id): of(_config)),
+    //         tap(config => _config = config),
+    //         switchMap(config => this.fetchBikesFromDB(config)),
+    //         switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes)),
+    //         tap(resp => console.log('resp!!!!!',resp)),
+    //         catchError(err => this.logService.log(dealershipId, JSON.stringify(err), {inventoryImportId: _config.inventoryImportId})),
+    //     );
+    // }
+
+    /**
+     * Top level function to optionally fetch db Config, access DB table
+     * and upload to server
+     * @param dealershipId Target dealership id
+     */
+    fetchBikesAndUpload(dealershipId: number, _config?: iTalonDetails) {
+        console.log('Fetch and upload to server...');
+        return this.fetchBikes(dealershipId, _config).pipe(
+            switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes)),
+            tap(resp => console.log('resp!!!!!',resp)),
+            catchError(err => this.postErrorToAPI(dealershipId, err, _config))
+        );
+    }
+
+    /**
+     * Top level function to fetch db Config, access DB table
+     * and upload to server
+     * @param dealershipId Target dealership id
+     */
+    fetchBikes(dealershipId: number, _config?: iTalonDetails): Observable<any[]> {
+        console.log('Fetch Bikes...');
+        return of(dealershipId).pipe(
+            switchMap(id => (!_config) ? this.fetchTalonCredentials(id): of(_config)),
             tap(config => _config = config),
-            switchMap(config => this.fetchBikes(config)),
-            switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes))
-        ).subscribe(resp => {
-            console.log('SUCCESS bikes uplaoded. Resp back:', resp);
-        }, err => {
-            this.logService.log(dealershipId, JSON.stringify(err), {inventoryImportId: _config.inventoryImportId});
-            console.log('Bikes not sent!!! Upload Failed:', err);
-        });
+            switchMap(config => this.fetchBikesFromDB(config)),
+            catchError(err => this.postErrorToAPI(dealershipId, err, _config))
+        );
+    }
+
+    /**
+     * Top level function schedule fetch & upload to server
+     * Stores Talon Config
+     * @param dealershipId Target dealership id
+     */
+    scheduleUpload(dealershipId: number, form: any) {
+        console.log('Schedule upload to server...');
+        // return this.fetchBikes(dealershipId).pipe(
+
+        //     switchMap(bikes => this.uploadToServer(dealershipId, _config, bikes)),
+        //     tap(resp => console.log('resp!!!!!',resp)),
+        //     catchError(err => {
+        //         console.error('abort schedule');
+        //         this.postErrorToAPI(dealershipId, err, _config))
+        // );
+    }
+
+    /**
+     * Upload bikes table data to server
+     * @param dealershipId Target dealership id
+     * @param config Talon config from API
+     * @param bikes Bike table data
+     */
+    uploadToServer(dealershipId: number, config: iTalonDetails, bikes: any[]) {
+        console.log('uploadToServer()');
+        const headers: {[header: string]: string} = {'Authorization': `apikey ${config.talonApiKey}`};
+        return this.http.post(`@api/talon-importer/${config.inventoryImportId}`,{websiteId:dealershipId, Table: bikes}, {headers});
     }
 
     /**
@@ -63,18 +121,30 @@ export class TalonService {
      * Sends request to main apllication thread
      * @param talonCredentials
      */
-    async fetchBikes(config: iTalonDetails) {
+    async fetchBikesFromDB(config: iTalonDetails) {
+        console.log('TalonService: fetchBikes()');
         if (!this._electronService.isElectronApp) throw Error('Not running in Electron');
 
         return await new Promise<any[]>((resolve: Function, reject: Function) => {
             this._electronService.ipcRenderer.once('db-bikes-resp', (event, arg) => {
-                console.log('Talon Bikes:',arg);
-                resolve(arg)
+                if (arg.error) {
+                    reject(arg.error);
+                } else {
+                    console.log('Talon Bikes:',arg);
+                    resolve(arg);
+                }
             })
 
             this._electronService.ipcRenderer.send('db-bikes-select', this.fomatForTedious(config))
         });
     }
+
+    postErrorToAPI(dealershipId, err, config) {
+        return this.logService.log(dealershipId, JSON.stringify(err), {inventoryImportId: config.inventoryImportId}).pipe(
+            // throwError(resp => `Error logged ${err}`)
+        )
+    }
+
 
     /**
      * Reformat config to the correct format for Tedious
@@ -93,21 +163,4 @@ export class TalonService {
         }
     }
 
-    /**
-     * Upload bikes table data to server
-     * @param dealershipId Target dealership id
-     * @param config Talon config from API
-     * @param bikes Bike table data
-     */
-    uploadToServer(dealershipId: number, config: iTalonDetails, bikes: any[]) {
-        const headers: {[header: string]: string} = {'Authorization': `apikey ${config.talonApiKey}`};
-        return this.http.post(`@api/talon-importer/${config.inventoryImportId}`,{websiteId:dealershipId, Table: bikes}, {headers});
-    }
-
-    // sendToServer = function() {
-    //     this
-    //     api/talon-importer/{inventory_import_id}
-    // }
-
-    // fetchAndUpload
 }

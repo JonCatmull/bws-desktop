@@ -2,4 +2,4 @@
 
 <p>Click the "upload Now" button below to do a one time upload from your Talon database to BWS.</p>
 
-<button (click)="talonService.fetchAndUpload(dealershipService.dealershipId)" class="btn btn--primary">Upload Now</button>
+<button (click)="uploadNow()" class="btn btn--primary" [disabled]="btnDisabled">Upload Now</button>

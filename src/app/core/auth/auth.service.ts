@@ -114,7 +114,6 @@ export class AuthService {
     }
 
     resetSessionTimer() {
-        console.log('reset timeout', this._sessionDuration);
         this.clearSessionTimer();
 
         const expiresAt = moment().add(this._sessionDuration * 1000);

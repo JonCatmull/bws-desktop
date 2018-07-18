@@ -10,14 +10,26 @@ import { switchMap } from 'rxjs/operators';
 })
 export class TalonUploaderComponent implements OnInit {
 
+    btnDisabled = false;
+
     constructor(public dealershipService: DealershipService, public talonService: TalonService) { }
 
     ngOnInit() {
-        this.dealershipService.dealershipId$.pipe(
-            switchMap(id => this.talonService.fetchTalonCredentials(id))
-        ).subscribe(dbCredentials => {
-            console.log('db details:',dbCredentials);
-        });
+        // this.dealershipService.dealershipId$.pipe(
+        //     // switchMap(id => this.talonService.fetchTalonCredentials(id))
+        // ).subscribe(dbCredentials => {
+        //     console.log('db details:',dbCredentials);
+        // });
+    }
+
+    uploadNow() {
+        this.btnDisabled = true;
+        this.talonService.fetchBikesAndUpload(this.dealershipService.dealershipId).subscribe(
+            resp => {
+                console.log('uPLOADnow RESP',resp);
+            }, console.error,
+            () => this.btnDisabled = false
+        );
     }
 
 }

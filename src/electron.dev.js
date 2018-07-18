@@ -14,43 +14,40 @@ console.log('starting electron...');
     function createWindow () {
         // set timeout to render the window not until the Angular
         // compiler is ready to show the project
-        console.log('create window 1');
-        setTimeout(() => {
-        console.log('create window 2');
-            // Create the browser window.
-            win = new BrowserWindow({
-                width: 1400,
-                height: 900,
-                icon: './src/favicon.ico',
-                webPreferences: {
-                    nodeIntegration: true // turn it on to use node features
-                }
-            })
 
-            // and load the app.
-            // win.loadURL(url.format({
-            //     pathname: 'localhost:4200',
-            //     protocol: 'http:',
-            //     slashes: true
-            // }));
-            win.loadURL(url.format({
-                pathname: path.join(__dirname, '../dist/index.html'),
-                protocol: 'file:',
-                slashes: true
-            }));
-            // win.loadFile('../dist/index.html')
+        // Create the browser window.
+        win = new BrowserWindow({
+            width: 1400,
+            height: 900,
+            icon: './src/favicon.ico',
+            webPreferences: {
+                nodeIntegration: true // turn it on to use node features
+            }
+        })
 
-            // Open the DevTools.
-            win.webContents.openDevTools()
+        // and load the app.
+        // win.loadURL(url.format({
+        //     pathname: 'localhost:4200',
+        //     protocol: 'http:',
+        //     slashes: true
+        // }));
+        win.loadURL(url.format({
+            pathname: path.join(__dirname, '../dist/index.html'),
+            protocol: 'file:',
+            slashes: true
+        }));
+        // win.loadFile('../dist/index.html')
 
-            // Emitted when the window is closed.
-            win.on('closed', () => {
-                // Dereference the window object, usually you would store windows
-                // in an array if your app supports multi windows, this is the time
-                // when you should delete the corresponding element.
-                win = null
-            })
-        }, 1000);
+        // Open the DevTools.
+        win.webContents.openDevTools()
+
+        // Emitted when the window is closed.
+        win.on('closed', () => {
+            // Dereference the window object, usually you would store windows
+            // in an array if your app supports multi windows, this is the time
+            // when you should delete the corresponding element.
+            win = null
+        })
     }
 
     // This method will be called when Electron has finished
@@ -85,12 +82,9 @@ console.log('starting electron...');
     //     }).catch(e => console.error("Main thread error:", e))
     // });
     ipcMain.on('db-bikes-select', (event, arg) => {
-        console.log('arg',arg);
         mssqlService.fetchBikes(arg).subscribe(bikes => {
-            console.log("MT -> fetch bikes resp:", bikes);
             event.sender.send('db-bikes-resp', bikes)
         }, e => {
-            console.error("Main thread error:", e);
             event.sender.send('db-bikes-resp', {error: e})
         })
     })
