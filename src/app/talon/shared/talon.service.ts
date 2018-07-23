@@ -42,9 +42,12 @@ export class TalonService {
     constructor(private http: HttpClient, private _electronService: ElectronService, private logService: LogService) {}
 
     fetchTalonCredentials(dealershipId: number) {
-        console.log('TalonService: fetchTalonCredentials()');
         return this.http.get<ITalonDetails>(`@api/talon-details/${dealershipId}`).pipe(
-            tap(resp => this.lastImported = resp.lastImportedAt)
+            tap(talonConfig => {
+                console.log('last imported',talonConfig.lastImportedAt, moment(talonConfig.lastImportedAt).toISOString());
+                this.lastImported = moment(talonConfig.lastImportedAt).toISOString()
+                // this.lastImported = talonConfig.lastImportedAt;
+            })
         );
     }
 
@@ -106,7 +109,6 @@ export class TalonService {
     }
 
     endSchedule() {
-        console.log('end Schedule subject')
         this.scheduledUpload$.next();
         this.scheduledUpload$.complete();
     }
@@ -155,9 +157,6 @@ export class TalonService {
                         console.log('Timer loop index: ', index);
                     }),
                     switchMap(_ => this.fetchBikesFromDB(_config)),
-                    // tap(bikes => {
-                    //     console.log('Scheduled Bikes collected: ', bikes);
-                    // }),
                     switchMap(bikes => this.postToServer(dealershipId, _config, bikes)),
                     takeUntil(this.scheduledUpload$),
                     takeLast(1)
@@ -244,5 +243,7 @@ export class TalonService {
         const duration = moment.duration(startDate.diff(endDate));
         return duration.asSeconds();
     }
+
+
 
 }
