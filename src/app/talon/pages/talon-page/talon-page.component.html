@@ -3,6 +3,8 @@
 <div class="l-container">
     <h1>Talon Importer</h1>
 
+    <p>Last imported: {{talonService.lastImported | date:'medium'}}</p>
+
     <app-talon-uploader></app-talon-uploader>
 
     <app-talon-scheduler></app-talon-scheduler>

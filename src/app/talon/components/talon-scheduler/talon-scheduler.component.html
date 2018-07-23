@@ -5,7 +5,10 @@
     upload to talon in the future you can <strong>tick the box</strong> to automatically "repeat every" <strong>7 days</strong> or
     <strong>24 hours</strong>.</p>
 
-<form id="talonScheduler" class="form" [formGroup]="schedulerForm">
+<p>{{talonService.scheduledUpload$ | async}}</p>
+<p>{{talonService.scheduledUploadStatus}}</p>
+
+<form *ngIf="!isActive" id="talonScheduler" class="form" [formGroup]="schedulerForm">
 
     <div class="form-controlGroup">
         <label for="startDate" class="form-label">Schedule for:</label>
@@ -24,7 +27,4 @@
     </div>
 </form>
 
-
-
-<p>Form value: {{ schedulerForm.value | json }}</p>
-<p>Form status: {{ schedulerForm.status | json }}</p>
+<button *ngIf="isActive" class="btn btn--primary" (click)="talonService.endSchedule()">Cancel schedule</button>

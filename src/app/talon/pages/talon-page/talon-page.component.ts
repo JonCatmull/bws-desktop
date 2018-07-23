@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TalonService } from '../../shared/talon.service';
 
 @Component({
   selector: 'app-talon-page',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TalonPageComponent implements OnInit {
 
-  constructor() { }
+    lastImported: string;
 
-  ngOnInit() {
-  }
+    constructor(public talonService: TalonService) { }
+        // public dealershipService: DealershipService
+
+    ngOnInit() {
+
+        // this.talonService.lastImported
+
+        // this.dealershipService.dealershipId$.pipe(
+        //     switchMap(id => this.talonService.fetchTalonCredentials(id))
+        // ).subscribe(
+        //     talonConfig => this.lastImported = talonConfig.lastImportedAt
+        // );
+    }
 
 }

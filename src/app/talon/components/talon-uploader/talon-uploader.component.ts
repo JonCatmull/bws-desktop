@@ -26,9 +26,17 @@ export class TalonUploaderComponent implements OnInit {
         this.btnDisabled = true;
         this.talonService.fetchBikesAndUpload(this.dealershipService.dealershipId).subscribe(
             resp => {
-                console.log('uPLOADnow RESP',resp);
-            }, console.error,
-            () => this.btnDisabled = false
+                console.log('END success',resp);
+                this.btnDisabled = false;
+            },
+            err => {
+                console.error('END error',err);
+                this.btnDisabled = false;
+            },
+            () => {
+                console.log('END final');
+                this.btnDisabled = false;
+            }
         );
     }
 

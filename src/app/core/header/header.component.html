@@ -4,7 +4,7 @@
 
     <div *ngIf="dealershipService.dealershipId && authService.user$ | async as user" class="header-select form-controlGroup-inputWrapper form-controlGroup-inputWrapper--select">
         <select class="form-input form-input--select" id="dealershipSelect" name="dealershipSelect" [formControl]="dealershipSelect">
-            <option *ngFor="let website of user.websites" [value]="website.id">{{website.name}}</option>
+            <option *ngFor="let website of user.websites" [value]="website.id" [innerHTML]="website.name"></option>
         </select>
     </div>
 
